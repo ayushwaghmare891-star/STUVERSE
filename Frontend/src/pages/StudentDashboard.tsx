@@ -19,7 +19,7 @@ import {
   getStudentRedemptions
 } from '@/lib/api';
 import toast from 'react-hot-toast';
-import { io } from 'socket.io-client';
+import { getSocket } from '@/lib/socket';
 
 interface Offer {
   _id: string;
@@ -296,9 +296,7 @@ export default function StudentDashboard() {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const socket = io(import.meta.env.VITE_API_URL || '', {
-      auth: { token }
-    });
+    const socket = getSocket();
 
     socket.on('connect_error', (err: any) => {
       console.error('Socket connection error', err.message);

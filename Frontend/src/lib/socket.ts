@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client';
+import { SOCKET_URL } from './config';
 
-const rawUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-const socketUrl = rawUrl.replace('/api', '');
+const socketUrl = SOCKET_URL;
 
 let socket: Socket | null = null;
 
