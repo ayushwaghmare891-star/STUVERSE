@@ -21,12 +21,17 @@ const app = express();
 // ==================
 // Global Middleware
 // ==================
-const rawOrigins =
-process.env.CORS_ORIGIN ||
-process.env.FRONTEND_URL ||
-'http://localhost:3000';
+const defaultOrigins = ['http://localhost:3000', 'http://localhost:5173'];
+const deployOrigin = 'https://stuverse-dmw8.onrender.com';
 
-const allowedOrigins = rawOrigins.split(',').map((o) => o.trim());
+const rawOrigins = [
+  ...((process.env.CORS_ORIGIN || '').split(',').map((o) => o.trim())),
+  ...((process.env.FRONTEND_URL || '').split(',').map((o) => o.trim())),
+  ...defaultOrigins,
+  deployOrigin,
+].filter(Boolean);
+
+const allowedOrigins = [...new Set(rawOrigins)];
 
 app.use(
 cors({
