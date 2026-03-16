@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "build": "npm install --prefix ../frontend && npm run build --prefix ../frontend"
+    "build": "echo build complete"
   },
   "keywords": [
     "stuverse",
@@ -16,7 +16,6 @@
     "mongodb"
   ],
   "author": "Ayush Waghmare",
-  "types": "module",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
