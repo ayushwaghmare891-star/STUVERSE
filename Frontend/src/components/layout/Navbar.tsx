@@ -1,9 +1,28 @@
 import { Bell, Search, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Navbar({ onMenuClick, className }: { onMenuClick: () => void, className?: string }) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const userString = localStorage.getItem('user');
+    if (!userString) return;
+    try {
+      const user = JSON.parse(userString);
+      if (user && user.name) {
+        setUserName(user.name);
+        return;
+      }
+      if (user && user.user && user.user.name) {
+        setUserName(user.user.name);
+      }
+    } catch {
+      // ignore parse errors
+    }
+  }, []);
 
   return (
     <header className={cn("h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-8 sticky top-0 z-30", className)}>
@@ -63,12 +82,12 @@ export function Navbar({ onMenuClick, className }: { onMenuClick: () => void, cl
         {/* Profile Dropdown */}
         <button className="flex items-center gap-2 p-1 pr-3 rounded-full hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
           <img 
-            src="https://picsum.photos/seed/ayush/100/100" 
+            src={userName ? `https://picsum.photos/seed/${encodeURIComponent(userName)}/100/100` : 'https://picsum.photos/seed/guest/100/100'}
             alt="Profile" 
             className="h-8 w-8 rounded-full object-cover ring-2 ring-white"
             referrerPolicy="no-referrer"
           />
-          <span className="text-sm font-medium text-slate-700 hidden sm:block">Ayush</span>
+          <span className="text-sm font-medium text-slate-700 hidden sm:block">{userName || 'Guest'}</span>
         </button>
       </div>
     </header>

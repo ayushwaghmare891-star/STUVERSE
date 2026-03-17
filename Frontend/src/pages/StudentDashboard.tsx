@@ -84,6 +84,7 @@ interface Notification {
 
 export default function StudentDashboard() {
   const [studentId, setStudentId] = useState<string | null>(null);
+  const [studentName, setStudentName] = useState<string>('');
 
   const [offers, setOffers] = useState<Offer[]>([]);
   const [offersPage, setOffersPage] = useState(1);
@@ -134,6 +135,11 @@ export default function StudentDashboard() {
     try {
       const { data } = await getStudentProfile();
       setStudentId(data._id);
+      setStudentName(data.name || '');
+
+      // Persist name in localStorage as fallback for navbar/name display across app
+      localStorage.setItem('user', JSON.stringify(data));
+
       return data._id;
     } catch (err) {
       console.error('Failed to fetch profile', err);
@@ -393,8 +399,11 @@ export default function StudentDashboard() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-          Student Dashboard
+          Welcome{studentName ? `, ${studentName}` : ''}
         </h1>
+        <p className="text-xl text-indigo-600 mt-1 font-semibold">
+          {studentName ? 'Your student dashboard is ready' : 'Student Dashboard'}
+        </p>
         <p className="text-slate-500 mt-1">
           Browse and claim amazing offers from verified vendors.
         </p>
